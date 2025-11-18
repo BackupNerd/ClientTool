@@ -73,12 +73,12 @@ if ($Scope -eq 'AllUsers') {
 }
 else {
     # Get the first user-scoped module path from PSModulePath
-    $userModulePaths = $env:PSModulePath -split ';' | Where-Object { 
+    $userModulePaths = @($env:PSModulePath -split ';' | Where-Object { 
         $_ -like "*$env:USERNAME*" -or $_ -like "*Documents*" 
-    } | Where-Object { Test-Path $_ -ErrorAction SilentlyContinue }
+    } | Where-Object { Test-Path $_ -ErrorAction SilentlyContinue })
     
-    if ($userModulePaths) {
-        $targetBase = $userModulePaths[0]
+    if ($userModulePaths.Count -gt 0) {
+        $targetBase = $userModulePaths[0].ToString().Trim()
     } else {
         # Fallback to hardcoded path if nothing found in PSModulePath
         if ($PSVersionTable.PSVersion.Major -ge 7) {
@@ -89,7 +89,7 @@ else {
     }
 }
 
-$targetDir = Join-Path $targetBase $moduleName
+$targetDir = Join-Path -Path $targetBase -ChildPath $moduleName
 
 Write-Host "`n╔══════════════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
 Write-Host "║          ClientTool Module Installation                          ║" -ForegroundColor Cyan
