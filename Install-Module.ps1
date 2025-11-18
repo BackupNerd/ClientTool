@@ -169,7 +169,7 @@ Remove-Module ClientTool -Force -ErrorAction SilentlyContinue
 
 try {
     # Import from the installed location
-    Import-Module $targetDir -Force
+    Import-Module $targetDir -Force -ErrorAction Stop
     $module = Get-Module ClientTool
     $commands = Get-Command -Module ClientTool
     
@@ -178,7 +178,10 @@ try {
     Write-Host "   ✓ Available commands: $($commands.Count)" -ForegroundColor Green
 }
 catch {
-    Write-Error "Failed to import module: $_"
+    Write-Host "   ✗ Failed to import module!" -ForegroundColor Red
+    Write-Host "   Error: $_" -ForegroundColor Red
+    Write-Host "`n   The module files have been installed to: $targetDir" -ForegroundColor Yellow
+    Write-Host "   Try running: Import-Module '$targetDir' -Force" -ForegroundColor Yellow
     exit 1
 }
 
