@@ -163,8 +163,13 @@ Write-Host "━━━━━━━━━━━━━━━━━━━━━━�
 
 # Test import
 Write-Host "`n🔄 Testing module import..." -ForegroundColor Yellow
+
+# Remove old module from session if loaded
+Remove-Module ClientTool -Force -ErrorAction SilentlyContinue
+
 try {
-    Import-Module ClientTool -Force
+    # Import from the installed location
+    Import-Module $targetDir -Force
     $module = Get-Module ClientTool
     $commands = Get-Command -Module ClientTool
     
