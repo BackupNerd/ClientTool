@@ -72,11 +72,20 @@ if ($Scope -eq 'AllUsers') {
     }
 }
 else {
-    # Support both PowerShell 7+ and Windows PowerShell
-    if ($PSVersionTable.PSVersion.Major -ge 7) {
-        $targetBase = "$HOME\Documents\PowerShell\Modules"
+    # Get the first user-scoped module path from PSModulePath
+    $userModulePaths = $env:PSModulePath -split ';' | Where-Object { 
+        $_ -like "*$env:USERNAME*" -or $_ -like "*Documents*" 
+    } | Where-Object { Test-Path $_ -ErrorAction SilentlyContinue }
+    
+    if ($userModulePaths) {
+        $targetBase = $userModulePaths[0]
     } else {
-        $targetBase = "$HOME\Documents\WindowsPowerShell\Modules"
+        # Fallback to hardcoded path if nothing found in PSModulePath
+        if ($PSVersionTable.PSVersion.Major -ge 7) {
+            $targetBase = "$HOME\Documents\PowerShell\Modules"
+        } else {
+            $targetBase = "$HOME\Documents\WindowsPowerShell\Modules"
+        }
     }
 }
 
