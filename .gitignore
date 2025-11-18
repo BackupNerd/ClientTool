@@ -1,0 +1,37 @@
+# PowerShell backup files
+*.backup
+*.psm1.after*
+*.psm1.before*
+*.psm1.complete-*
+*.psm1.final-*
+*.psm1.with*
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# PowerShell
+PSScriptAnalyzerSettings.psd1
+
+# Logs
+*.log
+logs/
+
+# Test results
+TestResults/
+*.Tests.ps1.xml
+
+# Personal files
+.env
+secrets/
